@@ -1,6 +1,5 @@
 const parrafos = document.querySelectorAll(".parrafo")
 const secciones = document.querySelectorAll(".seccion")
-const papelera = document.querySelectorAll(".papelera")
 
 parrafos.forEach(parrafo =>{
     parrafo.addEventListener("dragstart", event =>{
@@ -32,17 +31,33 @@ secciones.forEach(seccion => {
 })
 
 
-
+/* -> No era necesario hacer el forEach()
 papelera.forEach(papelera =>{
-    papelera.addEventListener("drop", event =>{
-        // event.preventDefault()
-        const id_parrafo = event.dataTransfer.getData("id")
-        const parrafo = document.getElementById(id_parrafo)
-        // papelera.removeChild(parrafo)
-        id_parrafo.parentNode.removeChild(id_parrafo)
+    
+}) */
+/* 
+ * lo que funca es hacer 2 escuchadores, un dragover y un drop
+ */
 
-        event.dataTransfer.dropEffect = "remove"
-        console.log(`elemento ${parrafo.innerText} eliminado`)
-    })
-    /* no logré eliminar el elemento ...  */
+/********************************************************************************/
+/* 
+EL BENDITO BUG ERA QUE USABA querySelectorAll(), pero debia ir querySelector()
+ME PARECE INEDITO QUE SOLO POR ESE DETALLE NO SERVIA LA PAPELERA
+*/
+/********************************************************************************/
+const papelera = document.querySelector(".papelera")
+
+papelera.addEventListener("dragover", event =>{
+    event.preventDefault()
+    event.dataTransfer.dropEffect = "copy"
+})
+
+papelera.addEventListener("drop", event =>{
+    const id_parrafo = event.dataTransfer.getData("id")
+    /* toda esta idea que tuve era demasiado compleja para este ejercicio, la solucion era mas simple... */
+    /* const parrafo = document.getElementById(id_parrafo)
+    // papelera.removeChild(parrafo)
+    id_parrafo.parentNode.removeChild(id_parrafo)*/
+    document.getElementById(id_parrafo).remove()
+    console.log(`elemento ${id_parrafo} eliminado`)
 })
